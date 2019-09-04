@@ -12,7 +12,7 @@ namespace WebApplication1.Models
     public abstract class Entity
     {
         public int Id { get; set; }
-        
+
         [Column(TypeName = "datetime2")]
         public DateTime Added { get; set; }
 

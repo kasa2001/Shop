@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebApplication1.Models.Order>
+﻿@model IEnumerable<WebApplication1.Models.OrderDetails>
 
 @{
     ViewBag.Title = "Index";
@@ -12,22 +12,10 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Adder.UserName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Modifier.UserName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Profile.UserName)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.Status)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Added)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Updated)
+            @Html.DisplayNameFor(model => model.Created)
         </th>
         <th></th>
     </tr>
@@ -35,22 +23,10 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Adder.UserName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Modifier.UserName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Profile.UserName)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.Status)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Added)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Updated)
+            @Html.DisplayFor(modelItem => item.Created)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |

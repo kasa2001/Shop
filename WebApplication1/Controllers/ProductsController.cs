@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PagedList;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -18,14 +19,32 @@ namespace WebApplication1.Controllers
         private ProductService productService = new ProductService();
 
         // GET: Products
-        public ActionResult Index()
+        public ActionResult Index(string sort, string currentFilter, string search, int? page)
         {
+            ViewBag.CurrentSort = sort;
+
+
+            if (search != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                search = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = search;
+
+
             var products = db.Products;
             ProductList list = this.productService.ProductList(
                 db.Products.ToList()
             );
 
-            return View(list.Products);
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+
+            return View(list.Find(search).Sort(sort).ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Products/Details/5
@@ -48,6 +67,7 @@ namespace WebApplication1.Controllers
         }
 
         // GET: Products/Create
+        [Authorize(Roles = "Administrator")]
         public ActionResult Create()
         {
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name");
@@ -59,6 +79,7 @@ namespace WebApplication1.Controllers
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public ActionResult Create([Bind(Include = "Name,Count,Cost,CategoryId")] CreateProduct product)
         {
             if (ModelState.IsValid)
@@ -80,6 +101,7 @@ namespace WebApplication1.Controllers
         }
 
         // GET: Products/Edit/5
+        [Authorize(Roles = "Administrator")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -106,6 +128,7 @@ namespace WebApplication1.Controllers
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public ActionResult Edit([Bind(Include = "Name,Count,Cost,CategoryId")] Product product)
         {
             if (ModelState.IsValid)
@@ -119,6 +142,7 @@ namespace WebApplication1.Controllers
         }
 
         // GET: Products/Delete/5
+        [Authorize(Roles = "Administrator")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -141,6 +165,7 @@ namespace WebApplication1.Controllers
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public ActionResult DeleteConfirmed(int id)
         {
             Product product = db.Products.Find(id);

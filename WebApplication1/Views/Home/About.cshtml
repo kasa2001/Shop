@@ -1,7 +1,43 @@
-﻿@{
+﻿@model WebApplication1.Models.AboutView
+@{
     ViewBag.Title = "About";
 }
 <h2>@ViewBag.Title.</h2>
 <h3>@ViewBag.Message</h3>
 
-<p>Use this area to provide additional information.</p>
+<div>
+    <h4>Product</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProductCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OrdersCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrdersCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CategoryCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CategoryCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductsInOrderCount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductsInOrderCount)
+        </dd>
+    </dl>
+</div>

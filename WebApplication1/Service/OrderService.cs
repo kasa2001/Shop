@@ -115,5 +115,32 @@ namespace WebApplication1.Service
 
             return order;
         }
+
+        public OrderList OrderList(ICollection<Order> orders)
+        {
+            List <OrderDetails> list = new List<OrderDetails>();
+
+            foreach(Order order in orders)
+            {
+                list.Add(
+                    this.OrderDetails(order)
+                );
+            }
+
+            return new OrderList()
+            {
+                OrderDetails = list
+            };
+        }
+
+        public OrderDetails OrderDetails(Order order)
+        {
+            return new OrderDetails()
+            {
+                Id = order.Id,
+                Created = order.Added,
+                Status = order.Status
+            };
+        }
     }
 }

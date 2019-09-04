@@ -25,6 +25,30 @@ namespace WebApplication1.DAL
             roleManager.Create(new IdentityRole("Administrator"));
             roleManager.Create(new IdentityRole("User"));
 
+            var user = new ApplicationUser()
+            {
+                UserName = "pawelgomolka@interia.pl"
+            };
+
+            userManager.Create(
+                user,
+                "zaq1@WSX"
+            );
+
+            userManager.AddToRole(
+                user.Id,
+                "Administrator"
+            );
+
+            context.Profiles.Add(
+                new Profile
+                {
+                    UserName = user.UserName
+                }
+            );
+
+            context.SaveChanges();
+
             base.Seed(context);
         }
     }

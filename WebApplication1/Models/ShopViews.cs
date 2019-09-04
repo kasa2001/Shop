@@ -28,10 +28,9 @@ namespace WebApplication1.Models
         [DisplayName("Nazwa kategorii")]
         public string CategoryName { get; set; }
 
-        [DisplayName("Nazwa kategorii")]
+
         public int CategoryId { get; set; }
 
-        [DisplayName("Nazwa kategorii")]
         public virtual Category Category { get; set; }
     }
 
@@ -69,6 +68,35 @@ namespace WebApplication1.Models
     public class CategoryList
     {
         public ICollection<CategoryDetails> Categories { get; set; }
+    }
+
+    public class OrderList
+    {
+        public ICollection<OrderDetails> OrderDetails { get; set; }
+    }
+
+    public class OrderDetails
+    {
+        public int Id { get; set; }
+
+        public DateTime Created { get; set; }
+
+        public Status Status { get; set; }
+    }
+
+    public class AboutView
+    {
+        [DisplayName("Product Count")]
+        public int ProductCount { get; set; }
+
+        [DisplayName("Category Count")]
+        public int CategoryCount { get; set; }
+
+        [DisplayName("Order Count")]
+        public int OrdersCount { get; set; }
+
+        [DisplayName("Products in order Count")]
+        public int ProductsInOrderCount { get; set; }
     }
     
 }

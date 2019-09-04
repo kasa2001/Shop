@@ -1,7 +1,20 @@
-﻿@model IEnumerable<WebApplication1.Models.ProductDetails>
+﻿@model PagedList.IPagedList<WebApplication1.Models.ProductDetails>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+
 
 @{
     ViewBag.Title = "Index";
+
+    var currentRouteValues = new RouteValueDictionary(Url.RequestContext.RouteData.Values);
+    var queryString = Request.QueryString;
+    foreach (var key in queryString.AllKeys)
+    {
+        currentRouteValues.Add(key, queryString[key]);
+    }
+    object data;
+
 }
 
 <h2>Index</h2>
@@ -9,43 +22,91 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+
+@using (Html.BeginForm("Index", "Products", FormMethod.Get))
+{
+    <p>
+        Find by name: @Html.TextBox("search")
+        <input type="submit" value="search" />
+        @{ 
+            if (currentRouteValues.TryGetValue("sort", out data) != false)
+            {
+                @Html.Hidden("sort", data)
+            }
+        }
+    </p>
+}
+
+@{
+
+
+    if (currentRouteValues.TryGetValue("sort", out data) != false)
+    {
+        currentRouteValues.Remove("sort");
+    }
+
+
+    currentRouteValues.Add("sort", "name");
+}
+
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.CategoryName)
+            Category name
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.ActionLink("Product name", "Index", currentRouteValues)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Count)
+            @{
+                var currentRouteValue = new RouteValueDictionary(Url.RequestContext.RouteData.Values);
+                foreach (var key in queryString.AllKeys)
+                {
+                    currentRouteValue.Add(key, queryString[key]);
+                }
+
+                if (currentRouteValue.TryGetValue("sort", out data) != false)
+                {
+                    currentRouteValue.Remove("sort");
+                }
+
+
+                currentRouteValue.Add("sort", "count");
+            }
+            @Html.ActionLink("Count", "Index", currentRouteValue)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Price)
+            Price
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.CategoryName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Count)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Price)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CategoryName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Count)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
 
 </table>
+
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

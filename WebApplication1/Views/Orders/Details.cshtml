@@ -1,4 +1,4 @@
-﻿@model WebApplication1.Models.Order
+﻿@model WebApplication1.Models.OrderDetails
 
 @{
     ViewBag.Title = "Details";
@@ -10,30 +10,7 @@
     <h4>Order</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Adder.UserName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Adder.UserName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Modifier.UserName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Modifier.UserName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Profile.UserName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Profile.UserName)
-        </dd>
-
+        
         <dt>
             @Html.DisplayNameFor(model => model.Status)
         </dt>
@@ -43,19 +20,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Added)
+            @Html.DisplayNameFor(model => model.Created)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Added)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Updated)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Updated)
+            @Html.DisplayFor(model => model.Created)
         </dd>
 
     </dl>
