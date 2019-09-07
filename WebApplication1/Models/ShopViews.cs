@@ -28,6 +28,8 @@ namespace WebApplication1.Models
         [DisplayName("Nazwa kategorii")]
         public string CategoryName { get; set; }
 
+        [DisplayName("Obrazek (fajny)")]
+        public string FileName { get; set; }
 
         public int CategoryId { get; set; }
 
@@ -36,6 +38,8 @@ namespace WebApplication1.Models
 
     public class CreateProduct
     {
+        [DisplayName("Obrazek (fajny)")]
+        public string FileName { get; set; }
 
         [Required(ErrorMessage = "Należy podać nazwę produktu")]
         [DisplayName("Nazwa produktu")]

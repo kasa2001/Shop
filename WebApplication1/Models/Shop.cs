@@ -7,7 +7,7 @@ using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Web;
-
+// Obrazki do produktów i filtr po kategorii
 namespace WebApplication1.Models
 {
     public abstract class Entity
@@ -65,6 +65,8 @@ namespace WebApplication1.Models
         public virtual Profile Adder { get; set; }
 
         public string Name { get; set; }
+
+        public string FileName { get; set; }
 
         public int Count { get; set; }
 

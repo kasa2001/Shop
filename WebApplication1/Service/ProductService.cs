@@ -120,7 +120,8 @@ namespace WebApplication1.Service
                 CategoryId = product.Category.Id,
                 Name = product.Name,
                 Count = product.Count,
-                Price = product.Cost
+                Price = product.Cost,
+                FileName = product.FileName
             };
         }
     }

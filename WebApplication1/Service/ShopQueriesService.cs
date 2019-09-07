@@ -50,5 +50,10 @@ namespace WebApplication1.Service
 
             return item.Single();
         }
+
+        public static ICollection<ProductDetails> Categories(this ICollection<ProductDetails> productList, string categoryName)
+        {
+            return productList.Where(p => p.CategoryName == categoryName).ToList();
+        }
     }
 }

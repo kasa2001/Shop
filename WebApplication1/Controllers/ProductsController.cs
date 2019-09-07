@@ -3,8 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using WebApplication1.Models;
@@ -41,11 +43,11 @@ namespace WebApplication1.Controllers
         }
 
         // GET: Products
-        public ActionResult Index(string sort, string currentFilter, string search, int? page)
+        public ActionResult Index(string sort, string currentFilter, string search, string category, int? page)
         {
             ViewBag.CurrentSort = sort;
 
-
+            
             if (search != null)
             {
                 page = 1;
@@ -63,10 +65,19 @@ namespace WebApplication1.Controllers
                 db.Products.ToList()
             );
 
+            ViewBag.Categories = this.db.Categories.ToList();
+
             int pageSize = 3;
             int pageNumber = (page ?? 1);
 
-            return View(list.Find(search).Sort(sort).ToPagedList(pageNumber, pageSize));
+            if (category == null)
+            {
+                return View(list.Find(search).Sort(sort).ToPagedList(pageNumber, pageSize));
+
+            }
+
+            return View(list.Find(search).Categories(category).Sort(sort).ToPagedList(pageNumber, pageSize));
+
         }
 
         // GET: Products/Details/5
@@ -108,12 +119,24 @@ namespace WebApplication1.Controllers
             {
                 Profile profile = db.Profiles.Single(p => p.UserName == User.Identity.Name);
 
-                db.Products.Add(
-                    this.productService.CreateProduct(
+                Product products = this.productService.CreateProduct(
                         profile,
                         product
-                    )
+                    );
+
+                HttpPostedFileBase file = Request.Files["file"];
+
+                if (file != null && file.ContentLength > 0)
+                {
+                    file.SaveAs(HttpContext.Server.MapPath("~/Obrazki/") + file.FileName);
+                    products.FileName = file.FileName;
+                }
+
+
+                db.Products.Add(
+                    products
                 );
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -155,6 +178,14 @@ namespace WebApplication1.Controllers
         {
             if (ModelState.IsValid)
             {
+                HttpPostedFileBase file = Request.Files["file"];
+
+                if (file != null && file.ContentLength > 0)
+                {
+                    file.SaveAs(HttpContext.Server.MapPath("~/Obrazki/") + file.FileName)  ;
+                    product.FileName = file.FileName;
+                }
+
                 db.Entry(product).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

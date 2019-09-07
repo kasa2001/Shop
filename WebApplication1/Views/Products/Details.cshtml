@@ -40,10 +40,18 @@
         <dd>
             @Html.DisplayFor(model => model.Price)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FileName)
+        </dt>
+        <dd>
+            <img src="~/Obrazki/@Model.FileName" width="50px" height="50px"/>
+        </dd>
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Add Product", "CreateOrder", "Orders", new { id = Model.Id }, null)
+    <button type="button" class="btn btn-success">
+        @Html.ActionLink("Add Product", "CreateOrder", "Orders", new { id = Model.Id }, null)
+    </button>
     @Html.ActionLink("Back to List", "Index")
 
     @if (User.IsInRole("Administrator"))
