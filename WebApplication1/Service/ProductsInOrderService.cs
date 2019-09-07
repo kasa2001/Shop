@@ -32,5 +32,36 @@ namespace WebApplication1.Service
             productsInOrder.Active = false;
             return productsInOrder;
         }
+
+        public List<ProductInOrder> ProductsInOrder(ICollection<ProductsInOrder> productsInOrders)
+        {
+            List<ProductInOrder> list = new List<ProductInOrder>();
+
+            foreach (ProductsInOrder p in productsInOrders)
+            {
+                list.Add(
+                    this.ProductInOrder(p)
+                );
+            }
+
+            return list;
+        }
+
+        public ProductInOrder ProductInOrder(ProductsInOrder productsInOrder)
+        {
+            return new ProductInOrder()
+            {
+                Id = productsInOrder.Id,
+                Name = productsInOrder.Product.Name,
+                Cost = productsInOrder.Cost,
+                Count = productsInOrder.Count,
+                Active = productsInOrder.Active,
+                Order = productsInOrder.Order,
+                Creator = productsInOrder.Adder.UserName,
+                Modifier = productsInOrder.Modifier.UserName,
+                Created = productsInOrder.Added,
+                Updated = productsInOrder.Updated
+            };
+        }
     }
 }

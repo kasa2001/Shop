@@ -22,7 +22,8 @@ namespace WebApplication1.Service
                 ModifierId = profile.Id,
                 Added = DateTime.Now,
                 Updated = DateTime.Now,
-                Status = Status.New
+                Status = Status.New,
+                ProfileId = profile.Id
             };
         }
 
@@ -139,7 +140,8 @@ namespace WebApplication1.Service
             {
                 Id = order.Id,
                 Created = order.Added,
-                Status = order.Status
+                Status = order.Status,
+                Profile = order.Profile
             };
         }
     }

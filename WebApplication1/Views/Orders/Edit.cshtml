@@ -1,4 +1,4 @@
-﻿@model WebApplication1.Models.Order
+﻿@model WebApplication1.Models.OrderDetails
 
 @{
     ViewBag.Title = "Edit";
@@ -7,9 +7,6 @@
 <h2>Edit</h2>
 
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
         <h4>Order</h4>
@@ -19,10 +16,38 @@
 
         <div class="form-group">
             @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EnumDropDownListFor(model => model.Status, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
-            </div>
+
+            @if (Model.Status == WebApplication1.Models.Status.New)
+            {
+                @Html.ActionLink("To Pay", "ToPay", new { id = Model.Id })
+            }
+
+            @if (Model.Status == WebApplication1.Models.Status.ToPay && User.IsInRole("Administrator"))
+            {
+                @Html.ActionLink("Payed", "Payed", new { id = Model.Id })
+            }
+
+            @if (Model.Status == WebApplication1.Models.Status.Payed && User.IsInRole("Administrator"))
+            {
+                @Html.ActionLink("Deliving", "Deliving", new { id = Model.Id })
+            }
+
+            @if (Model.Status == WebApplication1.Models.Status.Deliving && User.IsInRole("Administrator"))
+            {
+                @Html.ActionLink("Delived", "Delived", new { id = Model.Id })
+            }
+
+            @if (Model.Status == WebApplication1.Models.Status.Delived && User.IsInRole("Administrator"))
+            {
+                @Html.ActionLink("Returned", "Returned", new { id = Model.Id })
+            }
+
+            @if (Model.Status != WebApplication1.Models.Status.Cancelled && User.IsInRole("Administrator"))
+            {
+                @Html.ActionLink("Cancelled", "Cancelled", new { id = Model.Id })
+            }
+
+
         </div>
 
         <div class="form-group">
@@ -31,7 +56,7 @@
             </div>
         </div>
     </div>
-}
+
 
 <div>
     @Html.ActionLink("Back to List", "Index")

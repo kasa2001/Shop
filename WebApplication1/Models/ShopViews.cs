@@ -82,6 +82,8 @@ namespace WebApplication1.Models
         public DateTime Created { get; set; }
 
         public Status Status { get; set; }
+
+        public Profile Profile { get; set; }
     }
 
     public class AboutView
@@ -97,6 +99,29 @@ namespace WebApplication1.Models
 
         [DisplayName("Products in order Count")]
         public int ProductsInOrderCount { get; set; }
+    }
+
+    public class ProductInOrder
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        public int Count { get; set; }
+
+        public double Cost { get; set; }
+
+        public bool Active { get; set; }
+
+        public Order Order { get; set; }
+
+        public string Creator { get; set; }
+
+        public string Modifier { get; set; }
+
+        public DateTime Created { get; set; }
+
+        public DateTime? Updated { get; set; }
     }
     
 }

@@ -18,6 +18,28 @@ namespace WebApplication1.Controllers
 
         private ProductService productService = new ProductService();
 
+        // GET: Products/Category/5
+        public ActionResult Category(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Category category = this.db.Categories.Single(item => item.Id == id);
+
+            if (category == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(
+                this.productService.ProductList(
+                    this.db.Products.Where(product => product.Category.Id == category.Id).ToList()
+                ).Products
+            );
+        }
+
         // GET: Products
         public ActionResult Index(string sort, string currentFilter, string search, int? page)
         {

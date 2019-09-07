@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using WebApplication1.Models;
@@ -34,6 +35,20 @@ namespace WebApplication1.Service
         public static ICollection<ProductDetails> Pagination()
         {
             return new List<ProductDetails>();
+        }
+
+        public static Order Order(this DbSet<Order> orders, Profile currentUser, OrderService orderService)
+        {
+            var item = from Order in orders
+                       where Order.ProfileId == currentUser.Id && Order.Status == Status.New
+                       select Order;
+
+            if (item.Count() == 0)
+            {
+                return orderService.CreateOrder(currentUser);
+            }
+
+            return item.Single();
         }
     }
 }

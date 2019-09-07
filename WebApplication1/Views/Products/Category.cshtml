@@ -1,9 +1,10 @@
-﻿@model IEnumerable<WebApplication1.Models.ProductInOrder>
+﻿@model IEnumerable<WebApplication1.Models.ProductDetails>
+
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Category";
 }
 
-<h2>Index</h2>
+<h2>Category</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -17,10 +18,10 @@
             @Html.DisplayNameFor(model => model.Count)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Cost)
+            @Html.DisplayNameFor(model => model.Price)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Active)
+            @Html.DisplayNameFor(model => model.CategoryName)
         </th>
         <th></th>
     </tr>
@@ -34,21 +35,25 @@
             @Html.DisplayFor(modelItem => item.Count)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Cost)
+            @Html.DisplayFor(modelItem => item.Price)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Active)
+            @Html.DisplayFor(modelItem => item.CategoryName)
         </td>
         <td>
-            @if (item.Order.Status == WebApplication1.Models.Status.New)
+            @Html.ActionLink("Details", "Details", new { id = item.Id })
+
+            @if (User.IsInRole("Administrator"))
             {
                 @Html.ActionLink("Edit", "Edit", new { id = item.Id })
-            }   
-            @Html.ActionLink("Details", "Details", new { id = item.Id })
-            @if (item.Order.Status == WebApplication1.Models.Status.New)
-            {
-                @Html.ActionLink("Remove Product", "Remove", new { id = item.Id })
+
             }
+
+            @if (User.IsInRole("Administrator"))
+            {
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            }
+
         </td>
     </tr>
 }

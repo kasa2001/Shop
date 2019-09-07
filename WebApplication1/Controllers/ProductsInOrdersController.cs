@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using WebApplication1.Models;
+using WebApplication1.Service;
 
 namespace WebApplication1.Controllers
 {
@@ -14,10 +15,21 @@ namespace WebApplication1.Controllers
     {
         private ShopContext db = new ShopContext();
 
+        private ProductsInOrderService service = new ProductsInOrderService();
+
         // GET: ProductsInOrders
-        public ActionResult Index()
+        [Authorize]
+        public ActionResult Index(int id)
         {
-            var productsInOrders = db.ProductsInOrders.Include(p => p.Adder).Include(p => p.Modifier).Include(p => p.Order).Include(p => p.Product);
+            var productsInOrders = this.service.ProductsInOrder(
+                this.db.ProductsInOrders.Where(p => p.OrderId == id).ToList()
+            );
+
+            if (!User.IsInRole("Administrator"))
+            {
+                return View(productsInOrders.Where(p => p.Active == true).ToList());
+            }
+
             return View(productsInOrders.ToList());
         }
 
@@ -28,11 +40,14 @@ namespace WebApplication1.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ProductsInOrder productsInOrder = db.ProductsInOrders.Find(id);
+
+            ProductInOrder productsInOrder = this.service.ProductInOrder(db.ProductsInOrders.Find(id));
+
             if (productsInOrder == null)
             {
                 return HttpNotFound();
             }
+
             return View(productsInOrder);
         }
 
@@ -129,7 +144,20 @@ namespace WebApplication1.Controllers
             ProductsInOrder productsInOrder = db.ProductsInOrders.Find(id);
             db.ProductsInOrders.Remove(productsInOrder);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Orders");
+        }
+
+        public ActionResult Remove(int id)
+        {
+            ProductsInOrder productsInOrder = this.db.ProductsInOrders.Find(id);
+
+            this.service.RemoveProduct(productsInOrder);
+
+            new ProductService().AddProduct(productsInOrder.Product, 1);
+
+            this.db.SaveChanges();
+
+            return RedirectToAction("Index", "Orders");
         }
 
         protected override void Dispose(bool disposing)

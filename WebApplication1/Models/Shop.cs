@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
@@ -103,6 +104,7 @@ namespace WebApplication1.Models
     {
         public int Id { get; set; }
 
+        [DisplayName("User")]
         public string UserName { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
@@ -233,6 +235,7 @@ namespace WebApplication1.Models
             
             base.OnModelCreating(modelBuilder);
         }
-        
+
+        public System.Data.Entity.DbSet<WebApplication1.Models.ProductDetails> ProductDetails { get; set; }
     }
 }
